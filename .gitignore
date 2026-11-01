@@ -1,0 +1,6 @@
+shop.db
+__pycache__/
+venv/
+.venv/
+.env
+static/video/
