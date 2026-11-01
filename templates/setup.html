@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block body %}
+<div class="box" style="max-width:420px;margin:50px auto"><h1>Создайте логин и пароль</h1>
+{% if blocked %}<p>Первую настройку можно сделать только с компьютера, где запущен сайт, или с ключом настройки.</p>
+<p><b>Запускаете у себя на компьютере?</b> Откройте <a href="http://127.0.0.1:5000/admin">http://127.0.0.1:5000/admin</a> в браузере на этом же компьютере.</p>
+<p class="muted">На хостинге задайте переменную окружения <b>SETUP_KEY</b> (любая длинная строка), перезапустите сайт и обновите эту страницу.</p>
+{% else %}<p class="muted">Это нужно сделать один раз. Потом вы будете входить в админку с этим логином и паролем.</p>
+{% if err %}<p style="color:#e58f7a">{{ err }}</p>{% endif %}
+<form method="post"><input type="hidden" name="csrf" value="{{ csrf_token() }}">
+{% if need_key %}<input type="password" name="key" placeholder="Ключ настройки (SETUP_KEY)" style="width:100%;margin-bottom:10px">{% endif %}
+<input name="login" placeholder="Логин (от 3 символов)" autocomplete="username" style="width:100%;margin-bottom:10px" autofocus>
+<input type="password" name="password" placeholder="Пароль (от 8 символов)" autocomplete="new-password" style="width:100%;margin-bottom:10px">
+<input type="password" name="password2" placeholder="Повторите пароль" autocomplete="new-password" style="width:100%;margin-bottom:10px">
+<button style="width:100%">Создать и войти</button></form>{% endif %}</div>{% endblock %}

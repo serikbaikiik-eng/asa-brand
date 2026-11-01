@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block body %}
+<h1>Заказы</h1>
+<p><a class="btn {{ '' if not st else 'ghost' }}" href="?">Все</a>
+{% for key,label in STATUSES %} <a class="btn {{ '' if st==key else 'ghost' }}" href="?status={{ key }}">{{ label }}</a>{% endfor %}</p>
+<div class="box wrap"><table><tr><th>№ / дата</th><th>Клиент</th><th>Состав</th><th>Сумма</th><th>Оплата</th><th>Статус</th></tr>
+{% for r in rows %}<tr><td><b>{{ r.id }}</b><br><small class="muted">{{ r.created.replace('T',' ') }}</small></td>
+<td>{{ r.name }}{% if r.lang %} <small class="muted">[{{ r.lang|upper }}]</small>{% endif %}<br><a href="https://wa.me/{{ r.phone|select('in','0123456789')|join('') }}" target="_blank" rel="noopener">{{ r.phone }}</a>
+<br><small class="muted">{{ 'Самовывоз' if r.delivery=='pick' else r.city ~ ', ' ~ r.address }}</small>
+{% if r.note %}<br><small class="muted">«{{ r.note }}»</small>{% endif %}</td>
+<td>{% for l in lines[r.id] %}<div>{{ l }}</div>{% endfor %}</td>
+<td>{{ '{:,}'.format(r.total).replace(',', ' ') }} ₸</td><td>{{ PAYS.get(r.pay, r.pay) }}</td>
+<td><form method="post" action="{{ url_for('order_status', oid=r.id) }}"><input type="hidden" name="csrf" value="{{ csrf_token() }}">
+<select name="status" onchange="this.form.submit()">{% for key,label in STATUSES %}<option value="{{ key }}" {{ 'selected' if r.status==key }}>{{ label }}</option>{% endfor %}</select></form></td></tr>
+{% else %}<tr><td colspan="6" class="muted">Заказов пока нет.</td></tr>{% endfor %}</table></div>
+{% endblock %}

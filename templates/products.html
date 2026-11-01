@@ -1,0 +1,27 @@
+{% extends "base.html" %}{% block body %}
+<h1>Товары и цены</h1>
+<p class="muted">Здесь меняются цена за 1 мл, порядок показа и видимость. Название, фото и описание меняются по кнопке «Изменить».</p>
+<form method="post" action="{{ url_for('products_save') }}"><input type="hidden" name="csrf" value="{{ csrf_token() }}">
+<div class="box wrap"><table><tr><th></th><th>Аромат</th><th>Пол</th><th>Цена за 1 мл</th><th>Порядок</th><th>Виден в магазине</th><th></th></tr>
+{% for r in rows %}<tr><td><img src="/static/img/{{ r.img }}" alt="" width="44" height="44" style="object-fit:cover;border-radius:4px"></td>
+<td>{{ r.brand }} {{ r.name }}</td><td>{{ GENDERS.get(r.gender, r.gender) }}</td>
+<td><input type="number" min="1" name="price_{{ r.id }}" value="{{ r.price }}" style="width:100px"></td>
+<td><input type="number" min="1" name="sort_{{ r.id }}" value="{{ r.sort or r.id }}" style="width:70px"></td>
+<td><input type="checkbox" name="active_{{ r.id }}" {{ 'checked' if r.active }}></td>
+<td><a class="btn ghost" href="{{ url_for('product_edit', pid=r.id) }}">Изменить</a></td></tr>
+{% else %}<tr><td colspan="7" class="muted">Товаров пока нет. Добавьте первый ниже.</td></tr>{% endfor %}</table></div>
+<p><button>Сохранить цены и порядок</button></p></form>
+<div class="box" style="margin-top:20px"><h2>Добавить товар</h2>
+<form method="post" action="{{ url_for('products_add') }}" enctype="multipart/form-data"><input type="hidden" name="csrf" value="{{ csrf_token() }}">
+<p><input name="brand" placeholder="Бренд" required> <input name="name" placeholder="Название" required>
+<select name="gender">{% for k,v in GENDERS.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select>
+<input type="number" min="1" name="price" placeholder="цена за 1 мл" value="600" style="width:120px"></p>
+<p><input name="note" placeholder="Ноты (по-русски)" style="width:100%;max-width:420px"></p>
+<p><input name="note_kk" placeholder="Ноталар (қазақша), необязательно" style="width:100%;max-width:420px"></p>
+<p><input name="note_en" placeholder="Notes (English), необязательно" style="width:100%;max-width:420px"></p>
+<p><textarea name="desc_ru" rows="3" placeholder="Описание по-русски, необязательно (можно потом на странице «Изменить»)" style="width:100%;max-width:420px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:4px;padding:7px 9px;font:inherit"></textarea></p>
+<p>Фото (квадратное, jpg/png/webp): <input type="file" name="image" accept="image/jpeg,image/png,image/webp" required></p>
+<p>Дополнительные фото, необязательно (можно несколько): <input type="file" name="images" accept="image/jpeg,image/png,image/webp" multiple></p>
+<p>Видео-обзор, необязательно: <input name="video_url" placeholder="ссылка на YouTube" style="width:100%;max-width:300px"> или файл <input type="file" name="video" accept="video/mp4,video/webm"></p>
+<button>Добавить</button></form></div>
+{% endblock %}

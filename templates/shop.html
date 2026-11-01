@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{ store_name }}</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c0a08;--panel:#16120d;--line:#3a2f1c;--gold:#d4af6a;--gold2:#f0d79a;--text:#efe6d4;--muted:#a1957f;--err:#e58f7a;--ink:#1a1307;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.55 Manrope,system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0;line-height:1.1}
+a{color:inherit}button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
+.admbar{background:#2a2112;border-bottom:1px solid var(--line);padding:6px 20px;display:flex;gap:16px;flex-wrap:wrap;font-size:14px}.admbar a{color:var(--gold2)}
+.top{position:sticky;top:0;z-index:30;background:rgba(12,10,8,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-family:"Cormorant Garamond",Georgia,serif;font-size:24px;font-weight:700;letter-spacing:.14em;text-decoration:none;color:var(--gold2)}
+.logo span{color:var(--gold)}
+.tools{display:flex;align-items:center;gap:10px}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{border:0;background:none;padding:7px 11px;font-size:13px;font-weight:700;color:var(--muted)}
+.lang button[aria-pressed=true]{background:var(--gold);color:var(--ink)}
+.cartbtn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--gold);color:var(--gold2);text-decoration:none;border-radius:999px;padding:8px 16px;min-height:40px}
+.cartbtn b{background:var(--gold);color:var(--ink);border-radius:999px;min-width:22px;padding:0 7px;text-align:center;font-size:13px}
+.hero{padding:64px 20px 40px}.hero>div{max-width:900px;margin:0 auto}
+.kicker{color:var(--gold);letter-spacing:.1em;font-size:14px;text-transform:uppercase;margin:0 0 12px}
+.hero h1{font-size:clamp(44px,11vw,92px);color:var(--gold2);max-width:12ch}
+.lead{color:var(--muted);max-width:46ch;font-size:17px;margin:20px 0 28px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--gold);color:var(--ink);border:0;border-radius:4px;padding:12px 24px;font-weight:600;text-decoration:none;min-height:44px}
+.btn:hover{background:var(--gold2)}
+.btn.sm{background:none;border:1px solid var(--gold);color:var(--gold2);padding:7px 14px;min-height:38px;font-size:15px;font-weight:500}
+.btn.sm:hover{background:var(--gold);color:var(--ink)}
+.btn.ghost{background:none;color:var(--gold2);border:1px solid var(--gold)}.btn.ghost:hover{background:var(--panel)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.wrap{max-width:1100px;margin:0 auto;padding:16px 20px 40px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.tabs button{background:none;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:8px 16px}
+.tabs button[aria-pressed=true]{border-color:var(--gold);color:var(--gold2);background:var(--panel)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column}
+.pic{border:0;padding:0;background:#000;display:block;cursor:zoom-in}.pic img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:4px;flex:1}
+.chip{color:var(--gold);font-size:13px}
+.brand{color:var(--muted);font-size:13px}
+.card h3{font-size:24px}.note{color:var(--muted);font-size:14px;margin:0}
+.buy{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:12px}
+.buy small{color:var(--muted)}.buy b{color:var(--gold2);font-size:18px}
+.setsec{border-top:1px solid var(--line)}
+.setsec>div,.how{max-width:1100px;margin:0 auto;padding:36px 20px}
+.setsec h2,.how h2{font-size:38px;color:var(--gold2);margin-bottom:8px}.setsec p,.how p{color:var(--muted);margin:0}
+.setgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:20px}
+.setcard{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.setcard h3{font-size:28px}.setcard p{margin:4px 0 0}.setcard .big{color:var(--gold2);font-size:22px}
+.how{border-top:1px solid var(--line)}
+.perks{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.perks div{border:1px solid var(--line);color:var(--gold2);border-radius:999px;padding:6px 14px;font-size:14px}
+footer{border-top:1px solid var(--line);padding:28px 20px;text-align:center;color:var(--muted);font-size:14px}
+footer a{color:var(--gold2)}footer .logo{display:block;margin-bottom:10px}
+.page{max-width:1000px;margin:0 auto;padding:20px 20px 64px}
+.steps{display:flex;gap:10px;list-style:none;padding:0;margin:16px 0 24px}
+.steps li{display:flex;align-items:center;gap:10px;flex:1;padding:10px 0;border-bottom:2px solid var(--line);color:var(--muted);font-weight:600}
+.steps i{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-size:14px}
+.steps .on{border-color:var(--gold);color:var(--gold2)}.steps .on i{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.cols{display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px}
+.it{display:flex;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.it:last-child{border-bottom:0}.it img,.setic{width:76px;height:76px;border-radius:4px;object-fit:cover;flex:none}
+.setic{border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font:600 36px "Cormorant Garamond",Georgia,serif;color:var(--gold2)}
+.it .info{flex:1;min-width:0}.it small{color:var(--muted)}
+.qty{display:flex;align-items:center;gap:8px}.qty button{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--text);font-size:18px}
+.lp{font-weight:600;color:var(--gold2);min-width:96px;text-align:right}
+.lnk{background:none;border:0;color:var(--muted);text-decoration:underline;padding:0;font-size:14px}
+.sum{position:sticky;top:84px}.sum h2{font-size:28px;color:var(--gold2);margin-bottom:10px}
+.sl{display:flex;justify-content:space-between;gap:12px;padding:6px 0;color:var(--muted);font-size:15px}
+.sl.tot{color:var(--text);font-weight:600;font-size:18px;border-top:1px solid var(--line);margin-top:8px;padding-top:12px}
+.full{width:100%;margin-top:14px}
+fieldset{border:0;padding:0;margin:0 0 20px}legend{font:600 26px "Cormorant Garamond",Georgia,serif;color:var(--gold2);margin-bottom:8px;padding:0}
+input[type=text],input[type=tel]{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:4px;padding:11px 12px;font:inherit;margin-bottom:10px}
+.opt{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:4px;padding:10px 12px;margin-bottom:8px;cursor:pointer}
+.opt input{margin:0}.err{color:var(--err);min-height:20px;margin:0 0 6px;font-size:14px}
+.empty{color:var(--muted);padding:20px 0}.ok h2{font-size:38px;color:var(--gold2);margin-bottom:8px}.ok p{color:var(--muted);max-width:52ch}
+.paybox{border:1px solid var(--gold);background:var(--panel);border-radius:6px;padding:16px;margin:16px 0;max-width:540px}.paybox p{margin:6px 0 12px;color:var(--text)}
+.sb,.lb{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;padding:16px}
+.sb.on,.lb.on{display:flex}
+.sbp{background:var(--panel);border:1px solid var(--line);border-radius:6px;width:min(480px,100%);max-height:90%;overflow:auto;padding:20px}
+.sbp h2{font-size:30px;color:var(--gold2)}.sbc{color:var(--muted);margin:6px 0 12px}
+.lb img{max-width:100%;max-height:100%;border-radius:6px}.lb .x{position:absolute;top:14px;right:18px;background:none;border:0;color:#fff;font-size:34px}
+.lb{flex-direction:column;gap:12px}.lbstage{flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center}
+.lbstage img,.lbstage video{max-width:100%;max-height:100%;border-radius:6px}.lbstage iframe{width:min(960px,100%);aspect-ratio:16/9;max-height:100%;border:0;border-radius:6px;background:#000}
+.lbth{display:flex;gap:8px;max-width:100%;overflow-x:auto;padding:2px}.lbth .th{width:56px;height:56px;flex:none;padding:0;background:#000;border:2px solid var(--line);border-radius:6px;overflow:hidden;color:var(--gold2);font-size:20px;opacity:.7}
+.lbth .th.on{border-color:var(--gold2);opacity:1}.lbth .th img{width:100%;height:100%;max-height:none;object-fit:cover;border-radius:0;display:block}
+.lb .nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:56px;background:rgba(0,0,0,.55);border:1px solid var(--line);border-radius:6px;color:#fff;font-size:30px;line-height:1}
+.lb .nav.p{left:10px}.lb .nav.n{right:10px}
+.pic{position:relative}.pic .more{position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.72);color:var(--gold2);border:1px solid var(--line);border-radius:12px;padding:2px 10px;font-size:13px;line-height:1.5}
+a.pic{cursor:pointer}.card h3 a{text-decoration:none;color:inherit}.card h3 a:hover{color:var(--gold2)}
+.pp{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:32px;margin-top:14px}
+.pgal .main{background:#000;border:1px solid var(--line);border-radius:6px;overflow:hidden;aspect-ratio:1;display:flex;align-items:center;justify-content:center}
+.pgal .zb{border:0;padding:0;background:none;width:100%;height:100%;display:block;cursor:zoom-in}.pgal .main img{width:100%;height:100%;object-fit:cover;display:block}
+.pgal .main iframe,.pgal .main video{width:100%;height:100%;border:0;background:#000}
+.pth{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.pth button{width:68px;height:68px;padding:0;background:#000;border:2px solid var(--line);border-radius:6px;overflow:hidden;color:var(--gold2);font-size:22px;opacity:.75}
+.pth button.on{border-color:var(--gold2);opacity:1}.pth img{width:100%;height:100%;object-fit:cover;display:block}
+.pinfo h1{font-size:clamp(34px,6vw,54px);color:var(--gold2);margin:6px 0 10px}.pinfo .brand{font-size:15px}
+.pinfo h4{margin:22px 0 8px;color:var(--gold);font:600 13px/1 Manrope,system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase}
+.nchips{display:flex;flex-wrap:wrap;gap:8px}.nchips span{border:1px solid var(--line);border-radius:999px;padding:5px 14px;color:var(--gold2);font-size:14px}
+.pdesc{color:var(--muted);margin:0;white-space:pre-line}
+.pbuy{margin-top:24px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px}
+.pprice{font-size:26px;color:var(--gold2);font-weight:700}.pprice small{font-size:14px;color:var(--muted);font-weight:400}
+.mlrow{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.mlrow button{background:none;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:8px 16px;min-width:64px}
+.mlrow button.on{border-color:var(--gold);color:var(--gold2);background:#1d1710}
+.mlq{display:flex;align-items:center;gap:12px;margin-bottom:14px}.mlq button{width:38px;height:38px;border:1px solid var(--line);background:none;color:var(--gold2);border-radius:4px;font-size:20px}.mlq b{min-width:70px;text-align:center}
+.ptot{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;color:var(--muted)}.ptot b{font-size:22px;color:var(--gold2)}
+.pbuy .gl{margin-top:10px;text-align:center}
+@media(max-width:780px){.pp{grid-template-columns:1fr;gap:20px}}
+@media(max-width:780px){.cols{grid-template-columns:1fr}.sum{position:static}.it{flex-wrap:wrap}.lp{margin-left:auto}.logo{font-size:20px}}
+@media(max-width:420px){.lang button{padding:7px 8px}.cartbtn span{display:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+<style>:root{--gold:{{ accent }};--gold2:{{ accent2 }}}</style>
+</head>
+<body>
+{% if is_admin %}<div class="admbar"><b>Админ:</b><a href="/admin">Аналитика</a><a href="/admin/orders">Заказы</a><a href="/admin/products">Товары и цены</a><a href="/admin/settings">Настройки</a><a href="/admin/account">Аккаунт</a></div>{% endif %}
+<header class="top"><div class="bar">
+  <a class="logo" href="#"><span>{{ emblem }}</span> {{ store_name }}</a>
+  <div class="tools"><div class="lang" id="lang" role="group" aria-label="Language"></div>
+  <a class="cartbtn" href="#cart" aria-label="Cart"><span data-i="cart"></span><b id="cnt">0</b></a></div>
+</div></header>
+
+<div id="shop">
+  <section class="hero"><div>
+    <p class="kicker" data-i="kicker"></p><h1 data-i="h1"></h1><p class="lead" data-i="lead"></p>
+    <a class="btn" href="#catalog" data-i="cta"></a>
+  </div></section>
+  <section class="wrap" id="catalog"><nav class="tabs" id="tabs"></nav><div class="grid" id="grid"></div></section>
+  <section class="setsec" id="sets"><div><h2 data-i="sets"></h2><p data-i="setsp"></p><div class="setgrid" id="setgrid"></div></div></section>
+  <section class="how"><h2 data-i="howh"></h2><p data-i="howp"></p>
+    <div class="perks"><div data-i="pk1"></div><div data-i="pk2"></div><div data-i="pk3"></div><div data-i="pk4"></div></div></section>
+</div>
+<section id="cartpage" style="display:none"></section>
+
+<footer><span class="logo"><span>{{ emblem }}</span> {{ store_name }}</span>
+  <p data-i="contact" style="margin:0 0 6px"></p>
+  <a href="https://wa.me/{{ whatsapp }}" target="_blank" rel="noopener">WhatsApp: {{ phone_display }}</a><br>
+  {% if instagram %}<a href="https://www.instagram.com/{{ instagram }}" target="_blank" rel="noopener">Instagram: @{{ instagram }}</a>{% endif %}
+  <p style="margin:14px 0 0;font-size:13px">© {{ store_name }} · <a href="/admin" style="color:inherit">Admin</a></p></footer>
+
+<div class="sb" id="sb"><div class="sbp"><h2 id="sbt"></h2><p class="sbc" id="sbc"></p><div id="sbl"></div>
+  <button class="btn full" id="sbok" disabled data-i="tocart"></button>
+  <p style="text-align:center;margin:12px 0 0"><button class="lnk" id="sbx" data-i="cancel"></button></p></div></div>
+<div class="lb" id="lb"><button class="x" id="closeLb" aria-label="Close">×</button><button class="nav p" id="lbp" data-lbstep="-1" aria-label="Prev">‹</button><button class="nav n" id="lbn" data-lbstep="1" aria-label="Next">›</button><div class="lbstage" id="lbstage"></div><div class="lbth" id="lbth"></div></div>
+
+<script>
+var WHATSAPP={{ whatsapp|tojson }},KASPI_LINK={{ kaspi_link|tojson }},SETS={{ sets|tojson }},PRODUCTS={{ products|tojson }},CURRENCY={{ currency|tojson }},STORE={{ store_name|tojson }},T={{ texts|tojson }};
+var I={
+ru:{pnotes:"Ноты аромата",pdesc:"Описание",kicker:"В каждом аромате — свой стиль",h1:"Премиум-парфюмерия",lead:"Брендовые ароматы на разлив и боксы на 3 или 5 флаконов. Доставка по всему Казахстану.",cta:"Смотреть каталог",sets:"Наборы",cart:"Корзина",all:"Все",men:"Мужские",women:"Женские",unisex:"Унисекс",perml:"за 1 мл",add:"В корзину",added:"Добавлено",setsp:"Соберите бокс из любых ароматов каталога.",setpick:"любые ароматы на ваш выбор",choose:"Собрать набор",pickof:"Выбрано: {c} из {n}",tocart:"Добавить в корзину",cancel:"Отмена",howh:"Как заказать",howp:"Добавьте ароматы в корзину, оформите заказ и выберите оплату. Для подтверждения мы свяжемся с вами в WhatsApp.",pk1:"Премиум качество",pk2:"Брендовый аромат",pk3:"Доставка по Казахстану",pk4:"На каждый день и на любой случай",contact:"Связаться с нами",back:"Продолжить покупки",s1:"Корзина",s2:"Оплата",empty:"В корзине пока пусто. Выберите аромат в каталоге.",rm:"Удалить",topay:"Перейти к оплате",yourorder:"Ваш заказ",items:"Позиций",delivery:"Доставка",tbd:"по договорённости",total:"Итого",mlu:"мл",setw:"Набор",contacts:"Контакты",name:"Имя",phone:"Телефон",recv:"Получение",ship:"Доставка по Казахстану",pick:"Самовывоз",city:"Город",addr:"Адрес доставки",pay:"Оплата",kaspi:"Kaspi (выставим счёт на ваш номер)",cash:"Наличными при получении",transfer:"Переводом на карту",comment:"Комментарий к заказу (необязательно)",confirm:"Подтвердить заказ",backcart:"Вернуться в корзину",e1:"Укажите имя и телефон полностью.",e2:"Для доставки укажите город и адрес.",doneh:"Заказ оформлен",donep:"Мы открыли WhatsApp с вашим заказом. Если чат не открылся, нажмите кнопку ниже и отправьте сообщение нам.",openwa:"Открыть WhatsApp",tocat:"В каталог",kbh:"Оплата через Kaspi",kbp:"После подтверждения заказа мы выставим счёт в Kaspi на указанный вами номер телефона. Оплатите его в приложении Kaspi.kz.",kbl:"Оплатить по ссылке Kaspi",kbs:"Введите сумму точно"},
+kk:{pnotes:"Хош иіс ноталары",pdesc:"Сипаттама",kicker:"Әр иісте өз стилің!",h1:"Премиум хош иістер",lead:"Брендтік хош иістер құйып сатылады, сондай-ақ 3 немесе 5 флаконнан тұратын бокстар бар. Бүкіл Қазақстан бойынша жеткізу.",cta:"Каталогты қарау",sets:"Бокстар",cart:"Себет",all:"Барлығы",men:"Ерлерге",women:"Әйелдерге",unisex:"Унисекс",perml:"1 мл үшін",add:"Себетке",added:"Қосылды",setsp:"Каталогтағы кез келген хош иістерден бокс жинаңыз.",setpick:"кез келген хош иістерді өзіңіз таңдайсыз",choose:"Бокс жинау",pickof:"Таңдалды: {c} / {n}",tocart:"Себетке қосу",cancel:"Болдырмау",howh:"Қалай тапсырыс беру керек",howp:"Хош иістерді себетке салып, тапсырысты рәсімдеңіз де, төлем түрін таңдаңыз. Растау үшін WhatsApp арқылы хабарласамыз.",pk1:"Премиум сапа",pk2:"Брендтік хош иіс",pk3:"Қазақстан бойынша жеткізу",pk4:"Әр күнге және әр жағдайға",contact:"Бізбен байланысу",back:"Сатып алуды жалғастыру",s1:"Себет",s2:"Төлем",empty:"Себет әзірге бос. Каталогтан хош иіс таңдаңыз.",rm:"Өшіру",topay:"Төлемге өту",yourorder:"Сіздің тапсырысыңыз",items:"Позициялар",delivery:"Жеткізу",tbd:"келісім бойынша",total:"Барлығы",mlu:"мл",setw:"Бокс",contacts:"Байланыс",name:"Аты-жөніңіз",phone:"Телефон",recv:"Алу тәсілі",ship:"Қазақстан бойынша жеткізу",pick:"Өзім алып кетемін",city:"Қала",addr:"Жеткізу мекенжайы",pay:"Төлем",kaspi:"Kaspi (нөміріңізге шот жібереміз)",cash:"Алған кезде қолма-қол",transfer:"Картаға аудару",comment:"Тапсырысқа пікір (міндетті емес)",confirm:"Тапсырысты растау",backcart:"Себетке оралу",e1:"Аты-жөніңіз бен телефон нөміріңізді толық жазыңыз.",e2:"Жеткізу үшін қала мен мекенжайды жазыңыз.",doneh:"Тапсырыс рәсімделді",donep:"Тапсырысыңызбен WhatsApp ашылды. Чат ашылмаса, төмендегі батырманы басып, бізге хабарлама жіберіңіз.",openwa:"WhatsApp ашу",tocat:"Каталогқа",kbh:"Kaspi арқылы төлем",kbp:"Тапсырыс расталған соң көрсеткен телефон нөміріңізге Kaspi-да шот жібереміз. Оны Kaspi.kz қосымшасында төлеңіз.",kbl:"Kaspi сілтемесі арқылы төлеу",kbs:"Соманы дәл енгізіңіз"},
+en:{pnotes:"Fragrance notes",pdesc:"Description",kicker:"A style of your own in every scent",h1:"Premium perfume",lead:"Designer fragrances by the millilitre and boxes of 3 or 5 vials. Delivery across Kazakhstan.",cta:"Browse catalog",sets:"Boxes",cart:"Cart",all:"All",men:"Men",women:"Women",unisex:"Unisex",perml:"per 1 ml",add:"Add to cart",added:"Added",setsp:"Build a box from any fragrances in the catalog.",setpick:"any fragrances of your choice",choose:"Build a box",pickof:"Selected: {c} of {n}",tocart:"Add to cart",cancel:"Cancel",howh:"How to order",howp:"Add fragrances to your cart, place the order and choose a payment method. We will confirm it with you on WhatsApp.",pk1:"Premium quality",pk2:"Designer scent",pk3:"Delivery across Kazakhstan",pk4:"For every day and every occasion",contact:"Contact us",back:"Continue shopping",s1:"Cart",s2:"Payment",empty:"Your cart is empty. Pick a fragrance from the catalog.",rm:"Remove",topay:"Proceed to payment",yourorder:"Your order",items:"Items",delivery:"Delivery",tbd:"to be agreed",total:"Total",mlu:"ml",setw:"Box",contacts:"Contacts",name:"Name",phone:"Phone",recv:"Receiving",ship:"Delivery across Kazakhstan",pick:"Pickup",city:"City",addr:"Delivery address",pay:"Payment",kaspi:"Kaspi (we will send an invoice to your number)",cash:"Cash on receipt",transfer:"Card transfer",comment:"Order comment (optional)",confirm:"Confirm order",backcart:"Back to cart",e1:"Please enter your name and full phone number.",e2:"For delivery, enter your city and address.",doneh:"Order placed",donep:"We opened WhatsApp with your order. If the chat did not open, tap the button below and send us the message.",openwa:"Open WhatsApp",tocat:"To catalog",kbh:"Pay with Kaspi",kbp:"Once the order is confirmed, we will send a Kaspi invoice to your phone number. Pay it in the Kaspi.kz app.",kbl:"Pay via Kaspi link",kbs:"Enter the exact amount"}
+};
+for(var tl in T){if(I[tl])for(var tk in T[tl])I[tl][tk]=T[tl][tk];}
+var LANGS=[["kk","ҚАЗ"],["ru","РУС"],["en","ENG"]];
+
+var pgI=0,pgItems=[],pgMl=5,pgId=0;
+function renderProduct(){
+  var el=$("cartpage"),id=+location.hash.replace("#p/",""),p=find(id);
+  if(!p){el.innerHTML='<div class="page"><a class="lnk" href="#">‹ '+t("tocat")+'</a><p class="empty">404</p></div>';return;}
+  if(pgId!==id){pgId=id;pgI=0;pgMl=5;}
+  pgItems=(p.gallery&&p.gallery.length?p.gallery:[p.img]).map(function(u){return {t:"img",s:u};});
+  if(p.video)pgItems.push({t:"vid",v:p.video});
+  if(pgI>=pgItems.length)pgI=0;
+  document.title=p.brand+" "+p.name+" — "+STORE;
+  var notes=pn(p).split(",").map(function(x){return x.trim();}).filter(Boolean);
+  var desc=p["desc_"+lang]||p.desc_ru||"";
+  el.innerHTML='<div class="page"><a class="lnk" href="#catalog" data-tocat="1">‹ '+t("tocat")+'</a><div class="pp">'+
+   '<div class="pgal"><div class="main" id="pmain"></div><div class="pth" id="pth"></div></div>'+
+   '<div class="pinfo"><span class="chip '+p.gender+'">'+t(p.gender)+'</span> · <span class="brand">'+esc(p.brand)+'</span><h1>'+esc(p.name)+'</h1>'+
+   (notes.length?'<h4>'+t("pnotes")+'</h4><div class="nchips">'+notes.map(function(n){return '<span>'+esc(n)+'</span>';}).join("")+'</div>':"")+
+   (desc?'<h4>'+t("pdesc")+'</h4><p class="pdesc">'+esc(desc)+'</p>':"")+
+   '<div class="pbuy"><div class="pprice">'+money(p.price)+' <small>'+t("perml")+'</small></div>'+
+   '<div class="mlrow" id="mlrow">'+[3,5,10,15,30].map(function(v){return '<button data-ml="'+v+'">'+v+' '+t("mlu")+'</button>';}).join("")+'</div>'+
+   '<div class="mlq"><button data-mlstep="-1" aria-label="−">−</button><b id="mlv"></b><button data-mlstep="1" aria-label="+">+</button></div>'+
+   '<div class="ptot"><span>'+t("total")+'</span><b id="ptot"></b></div>'+
+   '<button class="btn full" id="paddbtn" data-padd="'+p.id+'" style="width:100%">'+t("add")+'</button>'+
+   '<p class="gl"><a class="lnk" href="#cart">'+t("cart")+' →</a></p></div>'+
+   '<div class="perks" style="margin-top:18px"><div>'+t("pk1")+'</div><div>'+t("pk2")+'</div><div>'+t("pk3")+'</div></div></div></div></div>';
+  showPg();mlUp();
+}
+function showPg(){
+  var it=pgItems[pgI],m=$("pmain");if(!m)return;
+  m.innerHTML=it.t==="img"?'<button class="zb" data-pzoom="'+pgI+'" aria-label="zoom"><img src="'+it.s+'" alt=""></button>':
+    it.v.type==="yt"?'<iframe src="'+it.v.src+'" allowfullscreen allow="encrypted-media; picture-in-picture" title="video"></iframe>':
+    '<video src="'+it.v.src+'" controls playsinline></video>';
+  $("pth").innerHTML=pgItems.length>1?pgItems.map(function(x,i){return '<button data-pi="'+i+'" class="'+(i===pgI?"on":"")+'" aria-label="'+(i+1)+'">'+(x.t==="img"?'<img src="'+x.s+'" alt="">':"▶")+'</button>';}).join(""):"";
+}
+function mlUp(){
+  var p=find(pgId);if(!p||!$("mlv"))return;
+  $("mlv").textContent=pgMl+" "+t("mlu");$("ptot").textContent=money(p.price*pgMl);
+  [].forEach.call(document.querySelectorAll("#mlrow button"),function(b){b.className=(+b.dataset.ml===pgMl)?"on":"";});
+}
+function applyTitle(){document.title=STORE+" — "+t("h1");}
+var lang="ru";try{lang=localStorage.getItem("asa_lang")||"";}catch(e){}
+if(!I[lang]){var nl=((navigator.language)||"ru").slice(0,2);lang=I[nl]?nl:"ru";}
+var cart={},sets=[],filter="all",done=false,lastUrl="",lastTotal=0,lastPay="",sbN=0;
+try{var sv=JSON.parse(localStorage.getItem("asa_cart2")||"{}");cart=sv.c||{};sets=sv.s||[];}catch(e){}
+
+function $(i){return document.getElementById(i);}
+function t(k,o){var s=(I[lang]&&I[lang][k])||I.ru[k]||k;if(o)for(var x in o)s=s.replace("{"+x+"}",o[x]);return s;}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function money(n){return n.toLocaleString("ru-RU").replace(/\s/g," ")+" "+CURRENCY;}
+function find(id){return PRODUCTS.filter(function(p){return p.id==id;})[0];}
+function pn(p){return p["note_"+lang]||p.note_ru||"";}
+function fl(n){if(lang==="ru"){var m=n%10,c=n%100;return n+(m===1&&c!==11?" флакон":(m>=2&&m<=4&&(c<12||c>14))?" флакона":" флаконов");}return lang==="kk"?n+" флакон":n+(n===1?" vial":" vials");}
+function boxName(n){return lang==="ru"?"Бокс на "+fl(n):lang==="kk"?n+"-тік бокс":n+"-vial box";}
+function save(){try{localStorage.setItem("asa_cart2",JSON.stringify({c:cart,s:sets}));}catch(e){}}
+for(var k0 in cart){if(!find(k0))delete cart[k0];}
+sets=sets.filter(function(s){return SETS[s.n]&&s.picks.every(find);});
+function count(){return Object.keys(cart).length+sets.length;}
+function total(){var s=0;for(var k in cart)s+=cart[k]*find(k).price;sets.forEach(function(x){s+=SETS[x.n];});return s;}
+function badge(){$("cnt").textContent=count();}
+function view(){var h=location.hash.replace("#","");return h==="cart"||h==="checkout"?h:/^p\/\d+$/.test(h)?"product":"shop";}
+
+function applyLang(){
+  document.documentElement.lang=lang;document.title=STORE+" — "+t("h1");
+  [].forEach.call(document.querySelectorAll("[data-i]"),function(e){e.textContent=t(e.getAttribute("data-i"));});
+  $("lang").innerHTML=LANGS.map(function(l){return '<button data-lang="'+l[0]+'" aria-pressed="'+(l[0]===lang)+'">'+l[1]+'</button>';}).join("");
+}
+function tabs(){
+  var present={all:1};PRODUCTS.forEach(function(p){present[p.gender]=1;});
+  $("tabs").innerHTML=["all","men","women","unisex"].filter(function(k){return present[k];}).map(function(k){
+    return '<button data-f="'+k+'" aria-pressed="'+(k===filter)+'">'+t(k)+'</button>';}).join("");
+}
+function grid(){
+  $("grid").innerHTML=PRODUCTS.filter(function(p){return filter==="all"||p.gender===filter;}).map(function(p){
+    return '<article class="card"><a class="pic" href="#p/'+p.id+'" aria-label="'+esc(p.brand+" "+p.name)+'"><img src="'+p.img+'" alt="" loading="lazy">'+((p.gallery&&p.gallery.length>1)||p.video?'<span class="more" aria-hidden="true">'+(p.gallery.length>1?"▣ "+p.gallery.length:"")+(p.video?" ▶":"")+'</span>':"")+'</a>'+
+    '<div class="body"><span class="chip '+p.gender+'">'+t(p.gender)+'</span><span class="brand">'+esc(p.brand)+'</span><h3><a href="#p/'+p.id+'">'+esc(p.name)+'</a></h3><p class="note">'+esc(pn(p))+'</p>'+
+    '<div class="buy"><div><b>'+money(p.price)+'</b> <small>'+t("perml")+'</small></div><button class="btn sm" data-add="'+p.id+'">'+t("add")+'</button></div></div></article>';}).join("");
+}
+function renderSets(){
+  $("sets").style.display=Object.keys(SETS).length?"":"none";
+  $("setgrid").innerHTML=Object.keys(SETS).map(Number).sort(function(a,b){return a-b;}).map(function(n){
+    return '<div class="setcard"><div><h3>'+boxName(n)+'</h3><p>'+fl(n)+' · '+t("setpick")+'</p></div>'+
+    '<div class="buy"><b class="big">'+money(SETS[n])+'</b><button class="btn" data-set="'+n+'">'+t("choose")+'</button></div></div>';}).join("");
+}
+function change(id,d){cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];save();badge();if(view()!=="shop")page();}
+
+function summ(btn,list){
+  var rows="";
+  if(list){
+    rows=Object.keys(cart).map(function(id){var p=find(id);return '<div class="sl"><span>'+esc(p.name)+' × '+cart[id]+' '+t("mlu")+'</span><span>'+money(p.price*cart[id])+'</span></div>';}).join("")+
+    sets.map(function(s){return '<div class="sl"><span>'+t("setw")+': '+fl(s.n)+'</span><span>'+money(SETS[s.n])+'</span></div>';}).join("");
+  }
+  return '<aside class="panel sum"><h2>'+t("yourorder")+'</h2>'+rows+
+  '<div class="sl"><span>'+t("items")+': '+count()+'</span><span>'+money(total())+'</span></div>'+
+  '<div class="sl"><span>'+t("delivery")+'</span><span>'+t("tbd")+'</span></div>'+
+  '<div class="sl tot"><span>'+t("total")+'</span><span>'+money(total())+'</span></div>'+btn+'</aside>';
+}
+function paybox(){
+  if(lastPay!=="kaspi")return "";
+  return '<div class="paybox"><b>'+t("kbh")+': '+money(lastTotal)+'</b><p>'+t("kbp")+'</p>'+
+  (KASPI_LINK?'<a class="btn" target="_blank" rel="noopener" href="'+esc(KASPI_LINK)+'">'+t("kbl")+'</a><p>'+t("kbs")+': '+money(lastTotal)+'</p>':"")+'</div>';
+}
+function cartRows(){
+  return Object.keys(cart).map(function(id){
+    var p=find(id),q=cart[id];
+    return '<div class="it"><img src="'+p.img+'" alt=""><div class="info"><b>'+esc(p.name)+'</b><br><small>'+esc(p.brand)+' · '+money(p.price)+' / '+t("mlu")+'</small><br><button class="lnk" data-rm="'+id+'">'+t("rm")+'</button></div>'+
+    '<div class="qty"><button data-dec="'+id+'" aria-label="−">−</button><span>'+q+' '+t("mlu")+'</span><button data-inc="'+id+'" aria-label="+">+</button></div><div class="lp">'+money(p.price*q)+'</div></div>';}).join("")+
+  sets.map(function(s,i){
+    return '<div class="it"><div class="setic">'+s.n+'</div><div class="info"><b>'+t("setw")+': '+fl(s.n)+'</b><br><small>'+s.picks.map(function(id){return esc(find(id).name);}).join(", ")+'</small><br><button class="lnk" data-rms="'+i+'">'+t("rm")+'</button></div><div class="lp">'+money(SETS[s.n])+'</div></div>';}).join("");
+}
+function page(){
+  var v=view(),el=$("cartpage");
+  $("shop").style.display=v==="shop"?"block":"none";
+  el.style.display=v==="shop"?"none":"block";
+  if(v==="shop"){applyTitle();return;}
+  if(v==="product"){renderProduct();return;}
+  var back='<a class="lnk" href="#">‹ '+t("back")+'</a>';
+  var steps='<ol class="steps"><li class="'+(v==="cart"?"on":"")+'"><i>1</i>'+t("s1")+'</li><li class="'+(v==="checkout"?"on":"")+'"><i>2</i>'+t("s2")+'</li></ol>';
+  var h='<div class="page">';
+  if(done){
+    el.innerHTML=h+steps+'<div class="ok"><h2>'+t("doneh")+'</h2><p>'+t("donep")+'</p>'+paybox()+
+    '<a class="btn" target="_blank" rel="noopener" href="'+esc(lastUrl)+'">'+t("openwa")+'</a> <a class="btn ghost" href="#">'+t("tocat")+'</a></div></div>';return;
+  }
+  if(!count()){el.innerHTML=h+back+steps+'<p class="empty">'+t("empty")+'</p><a class="btn" href="#catalog">'+t("tocat")+'</a></div>';return;}
+  if(v==="cart"){
+    el.innerHTML=h+back+steps+'<div class="cols"><div class="panel">'+cartRows()+'</div>'+summ('<a class="btn full" href="#checkout">'+t("topay")+'</a>',false)+'</div></div>';return;
+  }
+  el.innerHTML=h+back+steps+'<div class="cols"><div class="panel">'+
+  '<fieldset><legend>'+t("contacts")+'</legend><input type="text" id="f_name" placeholder="'+t("name")+'" autocomplete="name"><input type="tel" id="f_phone" placeholder="'+t("phone")+'" autocomplete="tel"></fieldset>'+
+  '<fieldset><legend>'+t("recv")+'</legend><label class="opt"><input type="radio" name="dl" value="ship" checked> '+t("ship")+'</label><label class="opt"><input type="radio" name="dl" value="pick"> '+t("pick")+'</label>'+
+  '<input type="text" id="f_city" placeholder="'+t("city")+'" autocomplete="address-level2"><input type="text" id="f_addr" placeholder="'+t("addr")+'" autocomplete="street-address"></fieldset>'+
+  '<fieldset><legend>'+t("pay")+'</legend><label class="opt"><input type="radio" name="pay" value="kaspi" checked> '+t("kaspi")+'</label><label class="opt"><input type="radio" name="pay" value="cash"> '+t("cash")+'</label><label class="opt"><input type="radio" name="pay" value="transfer"> '+t("transfer")+'</label></fieldset>'+
+  '<input type="text" id="f_note" placeholder="'+t("comment")+'"><p class="err" id="err"></p></div>'+
+  summ('<button class="btn full" id="order">'+t("confirm")+'</button><p style="text-align:center;margin:12px 0 0"><a class="lnk" href="#cart">'+t("backcart")+'</a></p>',true)+'</div></div>';
+}
+function submit(){
+  function g(i){return $(i).value.trim();}
+  var dl=document.querySelector("input[name=dl]:checked").value,pay=document.querySelector("input[name=pay]:checked").value;
+  var name=g("f_name"),phone=g("f_phone"),city=g("f_city"),addr=g("f_addr"),note=g("f_note");
+  if(!name||phone.replace(/\D/g,"").length<10){$("err").textContent=t("e1");return;}
+  if(dl==="ship"&&(!city||!addr)){$("err").textContent=t("e2");return;}
+  var PAYL={kaspi:"Kaspi (прошу выставить счёт)",cash:"наличными при получении",transfer:"переводом на карту"};
+  var lines=Object.keys(cart).map(function(id){var p=find(id),q=cart[id];return "• "+p.brand+" "+p.name+" × "+q+" мл = "+money(q*p.price);});
+  lines=lines.concat(sets.map(function(s){return "• Набор на "+s.n+" ("+s.picks.map(function(id){var p=find(id);return p.brand+" "+p.name;}).join(", ")+") = "+money(SETS[s.n]);}));
+  var msg="Здравствуйте! Хочу заказать:\n"+lines.join("\n")+"\nИтого: "+money(total())+
+    "\nПолучение: "+(dl==="ship"?"доставка, "+city+", "+addr:"самовывоз")+"\nОплата: "+PAYL[pay]+
+    "\nИмя: "+name+"\nТелефон: "+phone+(note?"\nКомментарий: "+note:"")+"\nЯзык сайта: "+lang;
+  var payload={items:Object.keys(cart).map(function(id){return {id:+id,ml:cart[id]};}),sets:sets.slice(),name:name,phone:phone,city:city,address:addr,delivery:dl,pay:pay,note:note,lang:lang};
+  $("order").disabled=true;
+  fetch("/api/orders",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
+    .then(function(r){return r.ok?r.json():{};}).catch(function(){return {};})
+    .then(function(res){
+      var head=res.id?"Заказ №"+res.id+"\n":"";
+      lastUrl="https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(head+msg);
+      lastTotal=res.total||total();lastPay=pay;cart={};sets=[];save();badge();done=true;
+      window.open(lastUrl,"_blank");page();window.scrollTo(0,0);
+    });
+}
+function sbUp(){
+  var c=document.querySelectorAll("#sbl input:checked").length;
+  $("sbc").textContent=t("pickof",{c:c,n:sbN});$("sbok").disabled=c!==sbN;
+  [].forEach.call(document.querySelectorAll("#sbl input:not(:checked)"),function(i){i.disabled=c>=sbN;});
+}
+function openSb(n){
+  sbN=n;$("sbt").textContent=boxName(n)+" — "+money(SETS[n]);
+  $("sbl").innerHTML=PRODUCTS.map(function(p){return '<label class="opt"><input type="checkbox" value="'+p.id+'"> '+esc(p.brand+" · "+p.name)+'</label>';}).join("");
+  sbUp();$("sb").classList.add("on");
+}
+function setLang(l){
+  var ids=["f_name","f_phone","f_city","f_addr","f_note"],keep={};
+  ids.forEach(function(i){if($(i))keep[i]=$(i).value;});
+  lang=l;try{localStorage.setItem("asa_lang",l);}catch(e){}
+  $("sb").classList.remove("on");applyLang();tabs();grid();renderSets();page();
+  ids.forEach(function(i){if($(i)&&keep[i])$(i).value=keep[i];});
+}
+document.addEventListener("click",function(e){
+  var b=e.target.closest?e.target.closest("button,a"):e.target,d=b&&b.dataset?b.dataset:{};
+  if(d.lang)setLang(d.lang);
+  if(d.f){filter=d.f;tabs();grid();}
+  if(d.add){change(d.add,1);b.textContent=t("added");setTimeout(function(){b.textContent=t("add");},900);}
+  if(d.inc)change(d.inc,1);
+  if(d.dec)change(d.dec,-1);
+  if(d.rm){delete cart[d.rm];save();badge();page();}
+  if(d.rms){sets.splice(+d.rms,1);save();badge();page();}
+  if(d.zoom)openLb(d.zoom);
+  if(d.pi!==undefined){pgI=+d.pi;showPg();}
+  if(d.pzoom!==undefined)openLb(pgId,+d.pzoom);
+  if(d.ml){pgMl=+d.ml;mlUp();}
+  if(d.mlstep){pgMl=Math.max(1,Math.min(1000,pgMl+(+d.mlstep)));mlUp();}
+  if(d.padd){var pp=find(d.padd);cart[d.padd]=(cart[d.padd]||0)+pgMl;save();badge();b.textContent=t("added")+" ✓";setTimeout(function(){b.textContent=t("add");},1200);}
+  if(d.lbi!==undefined){lbI=+d.lbi;showLb();}
+  if(d.lbstep){lbI=(lbI+(+d.lbstep)+lbItems.length)%lbItems.length;showLb();}
+  if(d.set)openSb(+d.set);
+  if(b&&b.id==="order")submit();
+});
+document.addEventListener("change",function(e){if(e.target.closest&&e.target.closest("#sbl"))sbUp();});
+$("sbx").onclick=function(){$("sb").classList.remove("on");};
+$("sbok").onclick=function(){
+  var p=[].map.call(document.querySelectorAll("#sbl input:checked"),function(i){return +i.value;});
+  if(p.length!==sbN)return;
+  sets.push({n:sbN,picks:p});save();badge();$("sb").classList.remove("on");
+};
+var lbItems=[],lbI=0;
+function openLb(id,start){var p=find(id);if(!p)return;
+  lbItems=(p.gallery&&p.gallery.length?p.gallery:[p.img]).map(function(u){return {t:"img",s:u};});
+  if(p.video)lbItems.push({t:"vid",v:p.video});
+  lbI=start||0;showLb();$("lb").classList.add("on");}
+function showLb(){var it=lbItems[lbI],many=lbItems.length>1;
+  $("lbstage").innerHTML=it.t==="img"?'<img src="'+it.s+'" alt="">':
+    it.v.type==="yt"?'<iframe src="'+it.v.src+'" allowfullscreen allow="encrypted-media; picture-in-picture" title="video"></iframe>':
+    '<video src="'+it.v.src+'" controls playsinline></video>';
+  $("lbth").innerHTML=many?lbItems.map(function(x,i){return '<button class="th'+(i===lbI?" on":"")+'" data-lbi="'+i+'" aria-label="'+(i+1)+'">'+(x.t==="img"?'<img src="'+x.s+'" alt="">':"▶")+'</button>';}).join(""):"";
+  $("lbp").style.display=$("lbn").style.display=many?"":"none";}
+function closeLb(){$("lb").classList.remove("on");$("lbstage").innerHTML="";}
+$("closeLb").onclick=closeLb;
+$("lb").onclick=function(e){if(e.target===this||e.target.id==="lbstage")closeLb();};
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"){closeLb();$("sb").classList.remove("on");}
+  if($("lb").classList.contains("on")&&lbItems.length>1&&(e.key==="ArrowLeft"||e.key==="ArrowRight")){
+    lbI=(lbI+(e.key==="ArrowRight"?1:-1)+lbItems.length)%lbItems.length;showLb();}});
+window.addEventListener("hashchange",function(){if(view()==="shop")done=false;page();if(view()!=="shop")window.scrollTo(0,0);else if(location.hash==="#catalog"&&$("catalog"))$("catalog").scrollIntoView();});
+applyLang();tabs();grid();renderSets();badge();page();
+</script>
+</body>
+</html>

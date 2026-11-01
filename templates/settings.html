@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block body %}
+<h1>Настройки магазина</h1>
+<p class="muted">Всё, что видит покупатель на сайте, меняется здесь. После сохранения изменения сразу появляются на сайте.</p>
+<form method="post" action="{{ url_for('settings_save') }}"><input type="hidden" name="csrf" value="{{ csrf_token() }}">
+<div class="box" style="margin-bottom:16px"><h2>Магазин и контакты</h2>
+<p>Название магазина<br><input name="store_name" value="{{ s.store_name }}" maxlength="40" style="width:100%;max-width:360px"></p>
+<p>Значок возле названия (необязательно)<br><input name="emblem" value="{{ s.emblem }}" maxlength="3" style="width:90px"></p>
+<p>Главный цвет сайта<br><input type="color" name="accent" value="{{ s.accent }}" style="width:70px;height:36px;padding:2px"></p>
+<p>Номер WhatsApp для заказов (только цифры, с кодом страны)<br><input name="whatsapp" value="{{ s.whatsapp }}" placeholder="77051511150" style="width:100%;max-width:360px"></p>
+<p>Instagram (имя профиля, например _asa_kz)<br><input name="instagram" value="{{ s.instagram }}" style="width:100%;max-width:360px"></p>
+<p>Ссылка Kaspi Pay (https://…, необязательно)<br><input name="kaspi_link" value="{{ s.kaspi_link }}" style="width:100%"></p>
+<p>Знак валюты<br><input name="currency" value="{{ s.currency }}" maxlength="4" style="width:90px"></p></div>
+<div class="box" style="margin-bottom:16px"><h2>Боксы (наборы)</h2>
+<p class="muted">Сколько флаконов в боксе и сколько он стоит. Чтобы убрать бокс, очистите его поля. Если все поля пусты, раздел «Боксы» на сайте скрывается.</p>
+{% for n,p in rows %}<p>Флаконов: <input type="number" min="2" max="30" name="bn_{{ loop.index0 }}" value="{{ n }}" style="width:80px">
+&nbsp; Цена: <input type="number" min="1" name="bp_{{ loop.index0 }}" value="{{ p }}" style="width:130px"></p>{% endfor %}</div>
+<div class="box" style="margin-bottom:16px"><h2>Тексты на сайте</h2>
+<p class="muted">Если поле пустое, показывается стандартный текст (он виден серым внутри поля).</p>
+{% for code,lname in LANG_NAMES %}<h3 class="muted">{{ lname }}</h3>
+{% for k,label in TEXT_KEYS %}<p>{{ label }}<br><input name="t_{{ code }}_{{ k }}" value="{{ s.get('t_' ~ code ~ '_' ~ k, '') }}" placeholder="{{ DEFAULT_TEXTS[code][k] }}" maxlength="300" style="width:100%"></p>{% endfor %}{% endfor %}</div>
+<button>Сохранить настройки</button></form>
+{% endblock %}

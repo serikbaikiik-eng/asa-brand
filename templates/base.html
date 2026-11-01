@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Админка{% endblock %} · ASA BRAND</title>
+<style>
+:root{--bg:#0c0a08;--panel:#16120d;--line:#3a2f1c;--gold:#d4af6a;--gold2:#f0d79a;--text:#efe6d4;--muted:#a1957f;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,sans-serif}
+a{color:var(--gold2)}h1,h2{font-family:Georgia,serif;font-weight:600;margin:0 0 12px;color:var(--gold2)}
+nav{display:flex;gap:16px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+nav b{letter-spacing:.14em;color:var(--gold2);margin-right:8px}nav form{margin-left:auto}
+main{max-width:1100px;margin:0 auto;padding:20px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:20px}
+.card,.box{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px}
+.card small{color:var(--muted);display:block}.card strong{font-size:24px;color:var(--gold2)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:16px}
+table{width:100%;border-collapse:collapse}th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:500;font-size:13px}.wrap{overflow-x:auto}
+input,select,textarea{background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:4px;padding:7px 9px;font:inherit}
+button,.btn{background:var(--gold);color:#1a1307;border:0;border-radius:4px;padding:8px 14px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
+.ghost{background:none;border:1px solid var(--gold);color:var(--gold2)}
+.bar{background:var(--line);border-radius:3px;height:10px;margin-top:4px}.bar i{display:block;height:100%;background:var(--gold);border-radius:3px}
+.chart{display:flex;align-items:flex-end;gap:4px;height:130px}.chart div{flex:1;background:var(--gold);min-height:2px;border-radius:2px 2px 0 0}
+.muted{color:var(--muted)}.flash{background:var(--panel);border:1px solid var(--gold);padding:8px 12px;border-radius:4px;margin-bottom:12px}
+@media print{nav,.noprint{display:none!important}body{background:#fff}.box,.card{break-inside:avoid}}
+</style></head><body>
+{% if session.admin %}<nav><b>ASA BRAND</b><a href="{{ url_for('dashboard') }}">Аналитика</a><a href="{{ url_for('orders') }}">Заказы</a>
+<a href="{{ url_for('products') }}">Товары и цены</a><a href="{{ url_for('settings_page') }}">Настройки</a><a href="{{ url_for('account') }}">Аккаунт</a><a href="/" target="_blank">Магазин</a>
+<form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="csrf" value="{{ csrf_token() }}"><button class="ghost">Выйти</button></form></nav>{% endif %}
+<main>{% for m in get_flashed_messages() %}<div class="flash">{{ m }}</div>{% endfor %}{% block body %}{% endblock %}</main>
+</body></html>

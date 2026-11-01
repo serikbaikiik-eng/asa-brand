@@ -1,0 +1,39 @@
+{% extends "base.html" %}{% block body %}
+{% macro m(n) %}{{ '{:,}'.format(n).replace(',', ' ') }} ₸{% endmacro %}
+<h1>Аналитика и отчёт по продажам</h1>
+<div class="noprint">
+<p>{% for d,l in [('7','7 дней'),('30','30 дней'),('90','90 дней'),('all','Всё время')] %}
+<a class="btn {{ '' if days==d else 'ghost' }}" href="?days={{ d }}">{{ l }}</a> {% endfor %}</p>
+<form method="get" style="margin-bottom:12px">Период: <input type="date" name="from" value="{{ frm }}"> — <input type="date" name="to" value="{{ to }}">
+<button>Показать</button> <button type="button" class="ghost" onclick="window.print()">Печать / PDF</button></form></div>
+<p class="muted">Продажами считаются заказы со статусами «Оплачен», «Отправлен», «Выполнен». Статус меняется на странице «Заказы».</p>
+<div class="cards">
+<div class="card"><small>Выручка</small><strong>{{ m(k.t) }}</strong></div>
+<div class="card"><small>Продано заказов</small><strong>{{ k.c }}</strong></div>
+<div class="card"><small>Средний чек</small><strong>{{ m((k.t // k.c) if k.c else 0) }}</strong></div>
+<div class="card"><small>Продано, мл</small><strong>{{ ml_total }}</strong></div>
+<div class="card"><small>В работе (новые, подтверждённые)</small><strong>{{ pend.c }}</strong><small>{{ m(pend.t) }}</small></div>
+<div class="card"><small>Отменено</small><strong>{{ cancelled }}</strong></div></div>
+<div class="grid2">
+<div class="box"><h2>Выручка по дням</h2>{% set mx = (series|map(attribute=1)|max) or 1 %}
+<div class="chart">{% for d,t in series %}<div style="height:{{ (t*100//mx) }}%" title="{{ d }}: {{ m(t) }}"></div>{% endfor %}</div>
+<p class="muted">{{ series[0][0] }} — {{ series[-1][0] }}</p></div>
+<div class="box"><h2>Разрез</h2><h3 class="muted">По полу (разлив)</h3>
+{% for r in gender %}<div>{{ GENDERS.get(r.g, r.g) }} — {{ r.ml }} мл · {{ m(r.rev) }}</div>{% else %}<p class="muted">Нет данных.</p>{% endfor %}
+<h3 class="muted">По оплате</h3>
+{% for r in pays %}<div>{{ PAYS.get(r.pay, r.pay) }} — {{ r.c }} зак. · {{ m(r.t) }}</div>{% else %}<p class="muted">Нет данных.</p>{% endfor %}
+<h3 class="muted">По языку сайта</h3>
+{% for r in bylang %}<div>{{ {'kk':'Қазақша','ru':'Русский','en':'English'}.get(r.l, r.l) }} — {{ r.c }} зак. · {{ m(r.t) }}</div>{% else %}<p class="muted">Нет данных.</p>{% endfor %}
+<h3 class="muted">По статусам</h3>
+{% for key,label in STATUSES %}<div>{{ label }}: {{ stat.get(key, 0) }}</div>{% endfor %}</div></div>
+<div class="box wrap" style="margin-bottom:16px"><h2>Продажи по ароматам (разлив)</h2>
+{% set tm = (top|map(attribute='ml')|max) if top else 1 %}{% set tr = (top|sum(attribute='rev')) or 1 %}
+<table><tr><th>Аромат</th><th>Продано, мл</th><th>Выручка</th><th>Доля</th><th></th></tr>
+{% for r in top %}<tr><td>{{ r.brand }} {{ r.name }}</td><td>{{ r.ml }}</td><td>{{ m(r.rev) }}</td><td>{{ (r.rev*100//tr) }}%</td>
+<td style="width:30%"><div class="bar"><i style="width:{{ r.ml*100//tm }}%"></i></div></td></tr>
+{% else %}<tr><td colspan="5" class="muted">Пока нет продаж за период.</td></tr>{% endfor %}</table></div>
+<div class="box" style="margin-bottom:16px"><h2>Наборы</h2>
+{% for n,(c,t) in sets_sold %}<p>Наборов на {{ n }}: <b>{{ c }}</b> шт · {{ m(t) }}</p>{% else %}<p class="muted">Наборов не продано.</p>{% endfor %}
+{% if picks %}<h3 class="muted">Какие ароматы выбирают в наборы</h3>{% for n,c in picks %}<div>{{ n }} — <b>{{ c }}</b></div>{% endfor %}{% endif %}</div>
+<a class="btn ghost noprint" href="{{ url_for('export') }}">Скачать все заказы (CSV для Excel)</a>
+{% endblock %}

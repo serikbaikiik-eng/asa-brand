@@ -1,0 +1,37 @@
+{% extends "base.html" %}{% block body %}
+<p><a href="{{ url_for('products') }}">← Все товары</a></p>
+<h1>{{ r.brand }} {{ r.name }}</h1>
+<div class="box" style="max-width:560px">
+<form method="post" enctype="multipart/form-data"><input type="hidden" name="csrf" value="{{ csrf_token() }}">
+<p><img src="/static/img/{{ r.img }}" alt="" width="140" height="140" style="object-fit:cover;border-radius:6px"></p>
+<p>Новое фото (если хотите заменить)<br><input type="file" name="image" accept="image/jpeg,image/png,image/webp"></p>
+<hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+<p><b>Дополнительные фото</b> <span class="muted">(до 10, показываются в галерее после главного)</span></p>
+{% if extra %}<div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px">
+{% for m in extra %}<label style="display:block;text-align:center;font-size:12px" class="muted">
+<img src="/static/img/{{ m.file }}" alt="" width="84" height="84" style="object-fit:cover;border-radius:6px;display:block;margin-bottom:4px">
+<input type="checkbox" name="del_media" value="{{ m.id }}"> удалить</label>{% endfor %}</div>{% endif %}
+<p>Добавить фото (можно выбрать сразу несколько)<br><input type="file" name="images" accept="image/jpeg,image/png,image/webp" multiple></p>
+<p><b>Видео-обзор</b></p>
+{% if video %}<p class="muted">Сейчас: {{ 'ссылка на YouTube' if video.kind=='yt' else 'файл ' ~ video.file }}
+{% if video.kind=='video' %}<br><video src="/static/video/{{ video.file }}" controls width="260" style="border-radius:6px;margin-top:6px"></video>{% endif %}
+<br><label><input type="checkbox" name="del_video" value="1"> удалить видео</label></p>{% endif %}
+<p>Ссылка на YouTube<br><input name="video_url" placeholder="https://www.youtube.com/watch?v=…" style="width:100%"></p>
+<p>или файл mp4 / webm<br><input type="file" name="video" accept="video/mp4,video/webm"><br><small class="muted">Новое видео заменяет старое. Длинные обзоры лучше добавлять ссылкой.</small></p>
+<hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+<p>Бренд<br><input name="brand" value="{{ r.brand }}" required style="width:100%"></p>
+<p>Название<br><input name="name" value="{{ r.name }}" required style="width:100%"></p>
+<p>Раздел<br><select name="gender">{% for k,v in GENDERS.items() %}<option value="{{ k }}" {{ 'selected' if r.gender==k }}>{{ v }}</option>{% endfor %}</select></p>
+<p>Цена за 1 мл<br><input type="number" min="1" name="price" value="{{ r.price }}" style="width:140px"></p>
+<p>Ноты, по-русски<br><input name="note" value="{{ r.note or '' }}" style="width:100%"></p>
+<p>Ноталар, қазақша<br><input name="note_kk" value="{{ r.note_kk or '' }}" style="width:100%"></p>
+<p>Notes, English<br><input name="note_en" value="{{ r.note_en or '' }}" style="width:100%"></p>
+<p>Описание на странице товара, по-русски (необязательно)<br><textarea name="desc_ru" rows="4" maxlength="1500" style="width:100%">{{ r.desc_ru or '' }}</textarea></p>
+<p>Сипаттама, қазақша<br><textarea name="desc_kk" rows="4" maxlength="1500" style="width:100%">{{ r.desc_kk or '' }}</textarea></p>
+<p>Description, English<br><textarea name="desc_en" rows="4" maxlength="1500" style="width:100%">{{ r.desc_en or '' }}</textarea></p>
+<button>Сохранить</button></form></div>
+<div class="box" style="max-width:560px;margin-top:16px"><h2>Удалить товар</h2>
+<p class="muted">Удаление нельзя отменить. Если по товару уже были заказы, удалить его нельзя: просто снимите галочку «Виден в магазине» на странице товаров.</p>
+<form method="post" action="{{ url_for('product_delete', pid=r.id) }}" onsubmit="return confirm('Удалить этот товар навсегда?')"><input type="hidden" name="csrf" value="{{ csrf_token() }}">
+<button class="ghost">Удалить товар</button></form></div>
+{% endblock %}
