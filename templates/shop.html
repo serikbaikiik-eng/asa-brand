@@ -5,7 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{{ store_name }}</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script>try{var th=localStorage.getItem("theme");if(th==="light"||th==="dark")document.documentElement.dataset.theme=th;}catch(e){}</script>
+<meta name="theme-color" content="#0c0a08" id="tc">
+<script>(function(){var d=document.documentElement,mq=window.matchMedia&&matchMedia("(prefers-color-scheme: light)");
+function stored(){try{var t=localStorage.getItem("theme");return t==="light"||t==="dark"?t:"";}catch(e){return "";}}
+window.setTheme=function(t){d.dataset.theme=t;var m=document.getElementById("tc");if(m)m.content=t==="light"?"#faf7f1":"#0c0a08";};
+setTheme(stored()||(mq&&mq.matches?"light":"dark"));
+if(mq&&mq.addEventListener)mq.addEventListener("change",function(){if(!stored())setTheme(mq.matches?"light":"dark");});})();</script>
 <style>
 :root{--bg:#0c0a08;--panel:#16120d;--line:#3a2f1c;--gold:#d4af6a;--gold2:#f0d79a;--text:#efe6d4;--muted:#a1957f;--err:#e58f7a;--ink:#1a1307;color-scheme:dark}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:76px}
@@ -140,6 +145,24 @@ body.hasfab{padding-bottom:88px}
 }
 @media(max-width:360px){.logo{font-size:15px;letter-spacing:.05em}.lang button{padding:8px 6px}}
 @media(max-width:340px){.bar{padding:8px 8px;gap:4px}.logo{font-size:13px;letter-spacing:.03em}.tools{gap:4px}.tt{width:34px;height:34px}.lang button{padding:8px 5px;font-size:11px}.cartbtn{width:42px;height:42px;min-height:42px}}
+@media(max-width:600px){
+/* каталог на телефоне: два товара в ряд, аккуратные карточки */
+.wrap{padding:12px 12px 32px}
+.tabs{flex-wrap:nowrap;overflow-x:auto;gap:6px;margin:0 -12px 14px;padding:0 12px 4px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;padding:7px 14px;font-size:14px;white-space:nowrap}
+.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.card{border-radius:8px}
+.body{padding:10px 10px 12px;gap:2px}
+.chip{font-size:11px}.brand{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card h3{font-size:18px;line-height:1.15}
+.note{font-size:12px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.buy{flex-direction:column;align-items:stretch;gap:8px;padding-top:8px}
+.buy b{font-size:16px}.buy small{font-size:11px}
+.buy .btn.sm{width:100%;min-height:40px;padding:8px 6px;font-size:14px}
+.pic .more{right:6px;bottom:6px;font-size:11px;padding:1px 7px}
+.setsec>div,.how{padding:28px 16px}.setsec h2,.how h2{font-size:30px}
+.setgrid{gap:12px}.setcard{padding:14px}.setcard h3{font-size:24px}
+}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 <style>:root{--gold:{{ accent }};--gold2:{{ accent2 }}}</style>
@@ -225,7 +248,7 @@ function mlUp(){
   [].forEach.call(document.querySelectorAll("#mlrow button"),function(b){b.className=(+b.dataset.ml===pgMl)?"on":"";});
 }
 function themeUI(){var b=$("tt");if(!b)return;var l=document.documentElement.dataset.theme==="light",s=t(l?"thd":"thl");b.title=s;b.setAttribute("aria-label",s);}
-function toggleTheme(){var n=document.documentElement.dataset.theme==="light"?"dark":"light";document.documentElement.dataset.theme=n;try{localStorage.setItem("theme",n);}catch(e){}themeUI();}
+function toggleTheme(){var n=document.documentElement.dataset.theme==="light"?"dark":"light";setTheme(n);try{localStorage.setItem("theme",n);}catch(e){}themeUI();}
 function applyTitle(){document.title=STORE+" — "+t("h1");}
 var lang="ru";try{lang=localStorage.getItem("asa_lang")||"";}catch(e){}
 if(!I[lang]){var nl=((navigator.language)||"ru").slice(0,2);lang=I[nl]?nl:"ru";}
