@@ -114,6 +114,22 @@ a.pic{cursor:pointer}.card h3 a{text-decoration:none;color:inherit}.card h3 a:ho
 @media(max-width:780px){.pp{grid-template-columns:1fr;gap:20px}}
 @media(max-width:780px){.cols{grid-template-columns:1fr}.sum{position:static}.it{flex-wrap:wrap}.lp{margin-left:auto}.logo{font-size:20px}}
 @media(max-width:420px){.lang button{padding:7px 8px}.cartbtn span{display:none}}
+.cartbtn .ic,.cartfab{display:none}
+@media(max-width:600px){
+.bar{padding:8px 12px;gap:8px}
+.logo{font-size:17px;letter-spacing:.08em;white-space:nowrap}
+.tools{gap:8px}
+.lang button{padding:8px 9px;font-size:12px}
+.cartbtn{position:relative;width:46px;height:46px;min-height:46px;padding:0;justify-content:center;background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.cartbtn span{display:none}
+.cartbtn .ic{display:block;width:24px;height:24px}
+.cartbtn b{position:absolute;top:-7px;right:-7px;min-width:21px;height:21px;line-height:21px;padding:0 5px;background:var(--text);color:var(--ink);font-size:12px;box-shadow:0 0 0 2px var(--bg)}
+.hero{padding:40px 16px 28px}
+.cartfab{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:40;align-items:center;justify-content:center;gap:10px;background:var(--gold);color:var(--ink);border-radius:999px;padding:14px 20px;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 6px 24px rgba(0,0,0,.55)}
+.cartfab.on{display:flex}.cartfab b{background:var(--ink);color:var(--gold2);border-radius:999px;min-width:24px;height:24px;line-height:24px;text-align:center;font-size:13px;padding:0 6px}
+body.hasfab{padding-bottom:88px}
+}
+@media(max-width:360px){.logo{font-size:15px;letter-spacing:.05em}.lang button{padding:8px 6px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 <style>:root{--gold:{{ accent }};--gold2:{{ accent2 }}}</style>
@@ -123,8 +139,10 @@ a.pic{cursor:pointer}.card h3 a{text-decoration:none;color:inherit}.card h3 a:ho
 <header class="top"><div class="bar">
   <a class="logo" href="#"><span>{{ emblem }}</span> {{ store_name }}</a>
   <div class="tools"><div class="lang" id="lang" role="group" aria-label="Language"></div>
-  <a class="cartbtn" href="#cart" aria-label="Cart"><span data-i="cart"></span><b id="cnt">0</b></a></div>
+  <a class="cartbtn" href="#cart" aria-label="Cart"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.6 12.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.8L20.5 8H6"/></svg><span data-i="cart"></span><b id="cnt">0</b></a></div>
 </div></header>
+
+<a class="cartfab" id="cartfab" href="#cart"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.6 12.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.8L20.5 8H6"/></svg><span id="cfl"></span><b id="cfc">0</b></a>
 
 <div id="shop">
   <section class="hero"><div>
@@ -215,7 +233,8 @@ for(var k0 in cart){if(!find(k0))delete cart[k0];}
 sets=sets.filter(function(s){return SETS[s.n]&&s.picks.every(find);});
 function count(){return Object.keys(cart).length+sets.length;}
 function total(){var s=0;for(var k in cart)s+=cart[k]*find(k).price;sets.forEach(function(x){s+=SETS[x.n];});return s;}
-function badge(){$("cnt").textContent=count();}
+function badge(){$("cnt").textContent=count();fab();}
+function fab(){var n=count(),v=view(),on=n>0&&(v==="shop"||v==="product");$("cfc").textContent=n;$("cfl").textContent=t("cart");$("cartfab").classList.toggle("on",on);document.body.classList.toggle("hasfab",on);}
 function view(){var h=location.hash.replace("#","");return h==="cart"||h==="checkout"?h:/^p\/\d+$/.test(h)?"product":"shop";}
 
 function applyLang(){
@@ -267,7 +286,7 @@ function cartRows(){
     return '<div class="it"><div class="setic">'+s.n+'</div><div class="info"><b>'+t("setw")+': '+fl(s.n)+'</b><br><small>'+s.picks.map(function(id){return esc(find(id).name);}).join(", ")+'</small><br><button class="lnk" data-rms="'+i+'">'+t("rm")+'</button></div><div class="lp">'+money(SETS[s.n])+'</div></div>';}).join("");
 }
 function page(){
-  var v=view(),el=$("cartpage");
+  var v=view(),el=$("cartpage");fab();
   $("shop").style.display=v==="shop"?"block":"none";
   el.style.display=v==="shop"?"none":"block";
   if(v==="shop"){applyTitle();return;}
